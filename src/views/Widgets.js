@@ -1,13 +1,20 @@
 import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
+import DocumentMeta from 'react-document-meta';
 import {isLoaded} from '../reducers/widgets';
 import {connect} from 'react-redux';
 import * as widgetActions from '../actions/widgetActions';
 import {load as loadWidgets} from '../actions/widgetActions';
-import {requireServerCss} from '../util';
 
-const styles = __CLIENT__ ? require('./Widgets.scss') : requireServerCss(require.resolve('./Widgets.scss'));
-
+@connect(
+  state => ({
+    widgets: state.widgets.data,
+    error: state.widgets.error,
+    loading: state.widgets.loading
+  }),
+  dispatch => bindActionCreators(widgetActions, dispatch)
+)
+export default
 class Widgets extends Component {
   static propTypes = {
     widgets: PropTypes.array,
@@ -22,12 +29,16 @@ class Widgets extends Component {
     if (loading) {
       refreshClassName += ' fa-spin';
     }
+    const styles = require('./Widgets.scss');
     return (
       <div className={styles.widgets + ' container'}>
         <h1>
           Widgets
-          <button className={styles.refreshBtn + ' btn btn-success'} onClick={load}><i className={refreshClassName}/> {' '} Reload Widgets</button>
+          <button className={styles.refreshBtn + ' btn btn-success'} onClick={load}><i
+            className={refreshClassName}/> {' '} Reload Widgets
+          </button>
         </h1>
+        <DocumentMeta title="React Redux Example: Widgets"/>
         <p>
           This data was loaded from the server before this route was rendered. If you hit refresh on your browser, the
           data loading will take place on the server before the page is returned. If you navigated here from another
@@ -63,22 +74,6 @@ class Widgets extends Component {
       </div>
     );
   }
-}
-
-@connect(state => ({
-  widgets: state.widgets.data,
-  error: state.widgets.error,
-  loading: state.widgets.loading,
-  query: state.router.query.q
-}))
-export default class WidgetsContainer {
-  static propTypes = {
-    widgets: PropTypes.array,
-    error: PropTypes.string,
-    loading: PropTypes.bool,
-    query: PropTypes.string,
-    dispatch: PropTypes.func.isRequired
-  }
 
   static fetchData(store) {
     const state = store.getState();
@@ -87,11 +82,5 @@ export default class WidgetsContainer {
       return store.dispatch(loadWidgets(query));
     }
   }
-
-  render() {
-    const { widgets, error, query, loading, dispatch } = this.props;
-    console.info('Here, we have the query param, but it\'s too late to load data.', query);
-    return <Widgets widgets={widgets} error={error} query={query}
-                    loading={loading} {...bindActionCreators(widgetActions, dispatch)}/>;
-  }
 }
+

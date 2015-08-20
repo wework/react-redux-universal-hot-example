@@ -3,9 +3,9 @@ import Router from 'react-router';
 import createRoutes from './views/createRoutes';
 import { Provider } from 'react-redux';
 
-const getFetchData = (component={}) => {
-  return component.DecoratedComponent ?
-    getFetchData(component.DecoratedComponent) :
+const getFetchData = (component = {}) => {
+  return component.WrappedComponent ?
+    getFetchData(component.WrappedComponent) :
     component.fetchData;
 };
 
