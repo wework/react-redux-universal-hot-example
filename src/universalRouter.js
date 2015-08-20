@@ -11,8 +11,6 @@ const getFetchData = (component = {}) => {
 
 export function createTransitionHook(store) {
   return (nextState, transition, callback) => {
-    console.info('redux router does not yet have location data, so we can\'t check query params in fetchData().',
-      store.getState().router);
     const promises = nextState.branch
       .map(route => route.component)                          // pull out individual route components
       .filter((component) => getFetchData(component))         // only look at ones with a static fetchData()
@@ -28,6 +26,9 @@ export function createTransitionHook(store) {
 }
 
 export default function universalRouter(location, history, store) {
+  if (__SERVER__) {
+    store.dispatch({type: '@@reduxReactRouter/locationDidChange', payload: location});
+  }
   const routes = createRoutes(store);
   return new Promise((resolve, reject) => {
     Router.run(routes, location, [createTransitionHook(store)], (error, initialState, transition) => {
