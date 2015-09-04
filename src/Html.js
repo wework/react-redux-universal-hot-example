@@ -25,7 +25,7 @@ export default class Html extends Component {
       <html lang="en-us">
         <head>
           <meta charSet="utf-8"/>
-          {DocumentMeta.rewind({asReact: true})}
+          {DocumentMeta.renderAsReact()}
 
           <link rel="shortcut icon" href="/favicon.ico" />
           <link href={cdn + 'twitter-bootstrap/3.3.5/css/bootstrap.css'}
