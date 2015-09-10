@@ -31,7 +31,10 @@ class Widgets extends Component {
     editing: PropTypes.object.isRequired,
     load: PropTypes.func.isRequired,
     editStart: PropTypes.func.isRequired
-  }
+  };
+  state = {
+    n: 0
+  };
 
   static fetchData(store) {
     if (!isLoaded(store.getState())) {
@@ -61,6 +64,9 @@ class Widgets extends Component {
             className={refreshClassName}/> {' '} Reload Widgets
           </button>
         </h1>
+        <button className="btn btn-danger" onClick={() => this.setState({ n: this.state.n + 1 })}>
+          {this.state.n} Increment
+        </button>
         <DocumentMeta title="React Redux Example: Widgets"/>
         <p>
           This data was loaded from the server before this route was rendered. If you hit refresh on your browser, the
