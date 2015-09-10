@@ -60,6 +60,7 @@
     "babel": "5.8.23",
     "babel-plugin-typecheck": "1.2.0",
     "body-parser": "^1.13.2",
+    "clean-webpack-plugin": "^0.1.3",
     "compression": "^1.5.0",
     "express": "^4.13.0",
     "express-session": "^1.11.3",
@@ -83,9 +84,7 @@
     "superagent": "^1.2.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.9.11",
-    "webpack-isomorphic-tools": "^0.8.5"
-  },
-  "devDependencies": {
+    "webpack-isomorphic-tools": "^0.8.5",
     "autoprefixer-loader": "^3.1.0",
     "babel-core": "^5.8.22",
     "babel-eslint": "^4.0.10",
@@ -93,7 +92,6 @@
     "babel-runtime": "5.8.20",
     "better-npm-run": "0.0.2",
     "chai": "^3.2.0",
-    "clean-webpack-plugin": "^0.1.3",
     "concurrently": "0.1.1",
     "css-loader": "^0.17.0",
     "eslint": "^1.3.1",
