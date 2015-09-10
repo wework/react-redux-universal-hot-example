@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
-import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 import { InfoBar } from 'components';
 import { createTransitionHook } from 'helpers/universalRouter';
 
@@ -36,13 +35,11 @@ const meta = {
 };
 
 @connect(
-    state => ({user: state.auth.user}),
-    dispatch => bindActionCreators({logout}, dispatch))
+    state => ({}),
+    dispatch => bindActionCreators({}, dispatch))
 export default class App extends Component {
   static propTypes = {
-    children: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    logout: PropTypes.func.isRequired
+    children: PropTypes.object.isRequired
   }
 
   static contextTypes = {
@@ -56,16 +53,6 @@ export default class App extends Component {
     router.addTransitionHook(this.transitionHook);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.user && nextProps.user) {
-      // login
-      this.context.router.transitionTo('/loginSuccess');
-    } else if (this.props.user && !nextProps.user) {
-      // logout
-      this.context.router.transitionTo('/');
-    }
-  }
-
   componentWillUnmount() {
     const {router} = this.context;
     router.removeTransitionHook(this.transitionHook);
@@ -76,19 +63,10 @@ export default class App extends Component {
     if (!isInfoLoaded(store.getState())) {
       promises.push(store.dispatch(loadInfo()));
     }
-    if (!isAuthLoaded(store.getState())) {
-      promises.push(store.dispatch(loadAuth()));
-    }
     return Promise.all(promises);
   }
 
-  handleLogout(event) {
-    event.preventDefault();
-    this.props.logout();
-  }
-
   render() {
-    const {user} = this.props;
     const styles = require('./App.scss');
     return (
       <div className={styles.app}>
@@ -101,17 +79,11 @@ export default class App extends Component {
             </Link>
 
             <ul className="nav navbar-nav">
-              <li><Link to="/widgets">Widgets</Link></li>
-              <li><Link to="/survey">Survey</Link></li>
               <li><Link to="/about">About Us</Link></li>
-              {!user && <li><Link to="/login">Login</Link></li>}
-              {user && <li className="logout-link"><a href="/logout" onClick={::this.handleLogout}>Logout</a></li>}
             </ul>
-            {user &&
-            <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.name}</strong>.</p>}
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <a href="https://github.com/erikras/react-redux-universal-hot-example"
+                <a href="https://github.com/wework/react-redux-universal-hot-example"
                    target="_blank" title="View on Github"><i className="fa fa-github"/></a>
               </li>
             </ul>
