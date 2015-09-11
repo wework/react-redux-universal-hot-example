@@ -41,6 +41,23 @@ npm install
 npm run dev
 ```
 
+## Building and preparing for Heroku
+
+Make sure to have the following heroku config vars set:
+
+```
+NODE_ENV          production
+NODE_PATH         ./src
+```
+
+Then run the following ON EVERY DEPLOY:
+
+```
+npm run build
+git add -f webpack-stats.json
+git add -f static/dist/*
+```
+
 ## Building and Running Production Server
 
 ```
@@ -54,8 +71,8 @@ A demonstration of this app can be seen [running on heroku](https://react-redux.
 
 ## Explanation
 
-What initally gets run is `bin/server.js`, which does little more than enable ES6 and ES7 awesomeness in the 
-server-side node code. It then initiates `server.js`. In `server.js` we proxy any requests to `/api/*` to the 
+What initally gets run is `bin/server.js`, which does little more than enable ES6 and ES7 awesomeness in the
+server-side node code. It then initiates `server.js`. In `server.js` we proxy any requests to `/api/*` to the
 [API server](#api-server), running at `localhost:3030`. All the data fetching calls from the client go to `/api/*`.
 Aside from serving the favicon and static content from `/static`, the only thing `server.js` does is initiate delegate
 rendering to `react-router`. At the bottom of `server.js`, we listen to port `3000` and initiate the API server.
@@ -87,7 +104,7 @@ The middleware, [`clientMiddleware.js`](https://github.com/erikras/react-redux-u
 
 #### Redux Modules... *What the Duck*?
 
-The `src/redux/modules` folder contains "modules" to help 
+The `src/redux/modules` folder contains "modules" to help
 isolate concerns within a Redux application (aka [Ducks](https://github.com/erikras/ducks-modular-redux), a Redux Style Proposal that I came up with). I encourage you to read the
 [Ducks Docs](https://github.com/erikras/ducks-modular-redux) and provide feedback.
 
